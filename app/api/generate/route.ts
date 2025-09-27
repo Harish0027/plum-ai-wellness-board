@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const userKey = `tips:${age}:${gender}:${goal}`;
 
     // Check Redis cache
-    const cached = await redis.get(userKey);
+    const cached: any = await redis.get(userKey);
     if (cached) {
       console.log("Returning cached tips");
       return new Response(cached, {
@@ -107,7 +107,7 @@ Return ONLY valid JSON. No commentary, no markdown, no extra text.
     }
 
     // Cache for 10 minutes
-    await redis.set(userKey, JSON.stringify(output), "EX", 600);
+    await redis.set(userKey, JSON.stringify(output), { ex: 60 * 10 });
 
     return new Response(JSON.stringify(output), {
       status: 200,

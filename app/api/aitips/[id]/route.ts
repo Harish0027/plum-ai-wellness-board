@@ -33,7 +33,7 @@ export async function POST(
     const cacheKey = `user:${JSON.stringify(user)}:tip:${JSON.stringify(tip)}`;
 
     // Check Redis cache
-    const cached = await redis.get(cacheKey);
+    const cached: any = await redis.get(cacheKey);
     if (cached) return NextResponse.json(JSON.parse(cached));
 
     const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
@@ -73,7 +73,7 @@ export async function POST(
     }
 
     // Cache result for 1 day
-    await redis.set(cacheKey, JSON.stringify(output), "EX", 86400);
+    await redis.set(cacheKey, JSON.stringify(output), { ex: 60 * 60 * 24 });
 
     return NextResponse.json(output);
   } catch (err) {
