@@ -39,6 +39,7 @@ export default function AiTipsCardPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   useEffect(() => {
+    //
     const stored = localStorage.getItem("aiTips");
 
     if (!stored) {
