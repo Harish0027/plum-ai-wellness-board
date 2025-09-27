@@ -126,15 +126,6 @@ export default function AiTipsCardPage() {
                         <span className="text-xs md:text-sm text-purple-400">
                           {tip.category}
                         </span>
-                        <button
-                          className="px-3 py-1 bg-purple-600 rounded-lg text-white text-xs md:text-sm hover:bg-purple-500 transition"
-                          onClick={(e) => {
-                            e.stopPropagation(); // prevent triggering parent click
-                            handleSave(tip);
-                          }}
-                        >
-                          Save
-                        </button>
                       </div>
                     </CardContent>
                   </Card>
