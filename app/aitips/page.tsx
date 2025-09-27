@@ -38,22 +38,30 @@ export default function AiTipsCardPage() {
   const [tips, setTips] = useState<Tip[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
   useEffect(() => {
-    //
     const stored = localStorage.getItem("aiTips");
 
-    console.log(stored);
-
     if (!stored) {
-      // No tips found → redirect to profile page
-      console.log("called");
-      router.replace("/profilecard"); // or whatever your profile route is
+      router.replace("/profilecard"); // redirect if nothing in storage
       return;
     }
 
     try {
       const parsed = JSON.parse(stored);
-      setTips(parsed);
+
+      // Validate that parsed.tips exists and is an array
+      if (
+        !parsed?.tips ||
+        !Array.isArray(parsed.tips) ||
+        parsed.tips.length === 0
+      ) {
+        console.warn("No tips array found in localStorage, redirecting...");
+        router.replace("/profilecard");
+        return;
+      }
+
+      setTips(parsed.tips);
     } catch (err) {
       console.error("Error parsing stored tips:", err);
       router.replace("/profilecard");
@@ -64,16 +72,25 @@ export default function AiTipsCardPage() {
 
   const handleSave = (tip: Tip) => {
     const saved = JSON.parse(localStorage.getItem("savedTips") || "[]");
-    if (!saved.some((t: Tip) => t.id === tip.id)) {
+
+    // Only save if tip with same title & explanation doesn't exist
+    const exists = saved.some(
+      (t: Tip) => t.title === tip.title && t.explanation === tip.explanation
+    );
+
+    if (!exists) {
       saved.push(tip);
       localStorage.setItem("savedTips", JSON.stringify(saved));
     }
+
     router.push("/my-saves");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-950 text-white flex flex-col items-center p-6">
-      <h1 className="text-3xl font-bold mb-6">✨ Your Personalized Board</h1>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-950 text-white flex flex-col items-center p-6 font-sans">
+      <h1 className="text-3xl md:text-4xl font-bold mb-6">
+        ✨ Your Personalized Board
+      </h1>
 
       <div className="w-full max-w-6xl">
         <div
@@ -88,25 +105,36 @@ export default function AiTipsCardPage() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35 }}
-                  onClick={() => router.push(`/aitips/${tip.id}`)}
                   className="w-full cursor-pointer"
+                  onClick={() => router.push(`/aitips/${tip.id}`)}
                 >
                   <Card className="w-full bg-gray-800/70 border border-gray-700 rounded-2xl shadow-lg hover:border-purple-500 transition">
                     <CardContent className="p-5 flex flex-col md:flex-row justify-between items-start gap-4">
                       <div className="flex items-start gap-4">
                         <span className="text-4xl mt-1">{tip.icon}</span>
                         <div>
-                          <h2 className="text-lg font-semibold">{tip.title}</h2>
-                          <p className="mt-2 text-sm text-gray-300">
+                          <h2 className="text-lg md:text-xl font-semibold">
+                            {tip.title}
+                          </h2>
+                          <p className="mt-2 text-sm md:text-base text-gray-300">
                             {tip.explanation}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-between w-full md:w-auto mt-4 md:mt-0 gap-4">
-                        <span className="text-xs text-purple-400">
+                        <span className="text-xs md:text-sm text-purple-400">
                           {tip.category}
                         </span>
+                        <button
+                          className="px-3 py-1 bg-purple-600 rounded-lg text-white text-xs md:text-sm hover:bg-purple-500 transition"
+                          onClick={(e) => {
+                            e.stopPropagation(); // prevent triggering parent click
+                            handleSave(tip);
+                          }}
+                        >
+                          Save
+                        </button>
                       </div>
                     </CardContent>
                   </Card>
