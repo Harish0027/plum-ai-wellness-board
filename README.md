@@ -44,14 +44,14 @@ npm install
 
 ### 🔹 Step 3 — create .env
 ```bash
-GOOGLE_API_KEY=
-REDIS_URL=
-UPSTASH_REDIS_REST_URL=
-UPSTASH_REDIS_REST_TOKEN=
+GOOGLE_API_KEY=""
+REDIS_URL=""
+UPSTASH_REDIS_REST_URL=""
+UPSTASH_REDIS_REST_TOKEN=""
 ```
 
 
-### 🔹 Step 3 — run command
+### 🔹 Step 4 — run command
 ```bash
 npm run dev
 ```
