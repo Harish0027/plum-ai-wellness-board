@@ -42,6 +42,8 @@ export default function AiTipsCardPage() {
     //
     const stored = localStorage.getItem("aiTips");
 
+    console.log(stored);
+
     if (!stored) {
       // No tips found → redirect to profile page
       console.log("called");
