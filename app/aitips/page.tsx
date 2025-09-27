@@ -39,10 +39,11 @@ export default function AiTipsCardPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   useEffect(() => {
-    const stored = sessionStorage.getItem("aiTips");
+    const stored = localStorage.getItem("aiTips");
 
     if (!stored) {
       // No tips found → redirect to profile page
+      console.log("called");
       router.replace("/profilecard"); // or whatever your profile route is
       return;
     }
@@ -52,7 +53,7 @@ export default function AiTipsCardPage() {
       setTips(parsed);
     } catch (err) {
       console.error("Error parsing stored tips:", err);
-      router.replace("/profilecard"); // redirect if parsing fails
+      router.replace("/profilecard");
     } finally {
       setLoading(false);
     }
