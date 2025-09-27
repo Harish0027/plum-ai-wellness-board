@@ -13,8 +13,8 @@ Bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/
 - ✅ Responsive UI with TailwindCSS + ShadCN UI  
 - ✅ LocalStorage integration for offline saves  
 - ✅ Deployable on Vercel with environment variables  
+- ✅ Paginated view for saved tips (better navigation experience)  
 
----
 
 ## 📦 Tech Stack
 - [Next.js 14](https://nextjs.org/)  
@@ -40,10 +40,22 @@ npm install
 ```
 
 
+
+
+### 🔹 Step 3 — create .env
+```bash
+GOOGLE_API_KEY=
+REDIS_URL=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+```
+
+
 ### 🔹 Step 3 — run command
 ```bash
 npm run dev
 ```
+
 
 
 
